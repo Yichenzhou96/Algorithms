@@ -38,9 +38,3 @@ def sorted_inversions(array):
         k += 1
 
     return count_right + count_left + count, new_array
-
-
-if __name__ == '__main__':
-
-    content = [1, 3, 5, 2, 4, 6, 9, 8, 10, 11, 16, 15]
-    print(sorted_inversions(content)[0])
