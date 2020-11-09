@@ -11,19 +11,32 @@ class Node:
         self.is_visited = True
 
 
-def dfs(node):
+def dfs_stack(s):
     stack = []
-    stack.append(node)
+    stack.append(s)
 
     while stack:
         node = stack.pop(-1)
+        print(node.value)
+        node.set_is_visited()
         edges = node.next
 
         if edges is None:
             continue
 
         for i in edges:
-            stack.append(i)
+            if not i.is_visited:
+                stack.append(i)
+
+
+def dfs_rec(node):
+    if not node.is_visited:
+        print(node.value)
+        node.set_is_visited()
+        edges = node.next
+        if edges is not None:
+            for i in edges:
+                dfs_rec(i)
 
 
 if __name__ == '__main__':
@@ -36,7 +49,8 @@ if __name__ == '__main__':
     head.set_next(node3)
     node2.set_next(node4)
     node3.set_next(node4)
-    dfs(head)
+    # dfs_rec(head)
+    dfs_stack(head)
 
 
 # if __name__ == '__main__':
