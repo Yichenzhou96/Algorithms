@@ -29,35 +29,33 @@ def dfs_stack(s):
                 stack.append(i)
 
 
-def dfs_rec(node):
-    if not node.is_visited:
-        print(node.value)
-        node.set_is_visited()
-        edges = node.next
-        if edges is not None:
-            for i in edges:
-                dfs_rec(i)
+def dfs_rec(visited, graph, node):
+    if node not in visited:
+        visited.add(node)
+        print(node)
+        dfs_rec(visited, graph, graph[node-1][1]-1)
 
 
 if __name__ == '__main__':
-    simple_graph = [[1, 3, 2], [2, 4], [3, 4]]
-    head = Node(1)
-    node2 = Node(2)
-    node3 = Node(3)
-    node4 = Node(4)
-    head.set_next(node2)
-    head.set_next(node3)
-    node2.set_next(node4)
-    node3.set_next(node4)
-    # dfs_rec(head)
-    dfs_stack(head)
+    # simple_graph = [[1, 3, 2], [2, 4], [3, 4]]
+    # head = Node(1)
+    # node2 = Node(2)
+    # node3 = Node(3)
+    # node4 = Node(4)
+    # head.set_next(node2)
+    # head.set_next(node3)
+    # node2.set_next(node4)
+    # node3.set_next(node4)
+    # # dfs_rec(head)
+    # dfs_stack(head)
 
+    with open("graph.txt") as tf:
+        content = tf.readlines()
 
-# if __name__ == '__main__':
-#
-#     with open("graph.txt") as tf:
-#         content = tf.readlines()
-#
-#     removed_content = [x.strip('\n').split(' ') for x in content]
-#
-#     print(removed_content)
+    removed_content = [x.strip('\n').split(' ') for x in content]
+
+    graph = [list(map(int, i)) for i in removed_content]
+    print(graph)
+    visited = set()
+    dfs_rec(visited, graph, 1)
+    print(visited)
