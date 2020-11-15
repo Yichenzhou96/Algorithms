@@ -30,10 +30,10 @@ def dfs_stack(s):
                 stack.append(i)
 
 
-def dfs_rec(visited, graph, node):
-    if node not in visited:
-        visited.append(node)
-        dfs_rec(visited, graph, graph[node])
+def dfs_rec(visit, g, n):
+    if n not in visit:
+        visit.add(n)
+        dfs_rec(visit, g, g[n])
 
 
 if __name__ == '__main__':
@@ -45,17 +45,29 @@ if __name__ == '__main__':
 
     result = [list(map(int, i)) for i in removed_content]
 
+    graph_reversed = {}
+    for k, v in result:
+        graph_reversed[v] = k
+
+    visited = set()
+    while True:
+        remain = graph_reversed.keys() - visited
+        if remain:
+            node = list(remain)[0]
+            dfs_rec(visited, graph_reversed, node)
+        else:
+            break
+
     graph = {}
     for k, v in result:
         graph[k] = v
 
-    visited = []
+    visited_rev = set()
     while True:
-        remain = graph.keys() - visited
+        remain = visited - visited_rev
         if remain:
-            node = random.choice(tuple(remain))
-            dfs_rec(visited, graph, node)
+            leader = list(remain)[0]
+            print(leader)
+            dfs_rec(visited_rev, graph, leader)
         else:
             break
-
-    print(visited)
