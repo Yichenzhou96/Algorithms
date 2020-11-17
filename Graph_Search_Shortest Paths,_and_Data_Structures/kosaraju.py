@@ -4,6 +4,7 @@ class Node:
         self.value = value
         self.next = []
         self.is_visited = False
+        self.finishing_time = 0
 
     def set_next(self, next):
         self.next.append(next)
@@ -11,29 +12,18 @@ class Node:
     def set_is_visited(self):
         self.is_visited = True
 
-
-def dfs_stack(s):
-    stack = []
-    stack.append(s)
-
-    while stack:
-        node = stack.pop(-1)
-        print(node.value)
-        node.set_is_visited()
-        edges = node.next
-
-        if edges is None:
-            continue
-
-        for i in edges:
-            if not i.is_visited:
-                stack.append(i)
+    def set_finishing_time(self, t):
+        self.finishing_time = t
 
 
 def dfs_rec(visit, g, n):
     if n not in visit:
         visit.add(n)
-        dfs_rec(visit, g, g[n])
+        dfs_rec(visit, g, g[n][0])
+
+    global t
+    g[n][1] = t
+    t += 1
 
 
 if __name__ == '__main__':
@@ -47,27 +37,21 @@ if __name__ == '__main__':
 
     graph_reversed = {}
     for k, v in result:
-        graph_reversed[v] = k
+        graph_reversed[v] = [k, 0]
 
     visited = set()
-    while True:
-        remain = graph_reversed.keys() - visited
-        if remain:
-            node = list(remain)[0]
-            dfs_rec(visited, graph_reversed, node)
-        else:
-            break
+    t = 0
+    for remain in graph_reversed.keys():
+        if remain not in visited:
+            dfs_rec(visited, graph_reversed, remain)
 
-    graph = {}
-    for k, v in result:
-        graph[k] = v
+    graph_2 = {v[0]: [k, v[1]] for k, v in sorted(graph_reversed.items(), key=lambda item: item[1][1], reverse=True)}
 
-    visited_rev = set()
-    while True:
-        remain = visited - visited_rev
-        if remain:
-            leader = list(remain)[0]
-            print(leader)
-            dfs_rec(visited_rev, graph, leader)
-        else:
-            break
+    visited_2 = set()
+    leader = set()
+    for remain in graph_2.keys():
+        if remain not in visited_2:
+            leader.add(remain)
+            dfs_rec(visited_2, graph_2, remain)
+
+    print(leader)
